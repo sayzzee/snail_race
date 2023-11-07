@@ -69,6 +69,3 @@ class Card:
         if len(all_cards) != 50:
             raise ValueError(f'Колода не может существовать')
         return print(all_cards)
-
-x = Card('go', 1)
-y = Card.all_cards()
