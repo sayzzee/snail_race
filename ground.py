@@ -13,7 +13,3 @@ class Field:
             FIELD[i] = FIELD[i][::side]
             random.shuffle(FIELD)
         self.field = FIELD
-        print(self.field)
-
-
-x = Field(FIELD)
