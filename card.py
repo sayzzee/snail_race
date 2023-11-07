@@ -12,6 +12,15 @@ class Card:
         'go_last': 'go n steps (last)'
     }
 
+    VEGETABLES = ['pepper', 'onion', 'peas', 'tomato', 'carrot', 'cucumber']
+
+    COUNT_CARDS = {
+        'vegetables': 30,
+        'sleep': 8,
+        'go': 6,
+        'go_last': 6
+    }
+
     def __init__(self, typec, value, game_rule=""):
         if typec in self.TYPES:
             self.typec = typec
@@ -45,9 +54,21 @@ class Card:
 
     @staticmethod
     def all_cards():
-        """ Все карты для создания колоды. """
-        return [Card(typec, value) for value in Card.VALUES for typec in Card.TYPES]
+        all_cards = []
+        for i in range(5):
+            for j in range(len(Card.VEGETABLES)):
+                all_cards.append(Card.VEGETABLES[j] + ': 0')
+        for i in range(8):
+            all_cards.append(Card.TYPES[0] + ': 0')
+        for i in range(3):
+            all_cards.append(Card.TYPES[2] + ': ' + str(i + 1))
+            all_cards.append(Card.TYPES[3] + ': ' + str(i + 1))
+            all_cards.append(Card.TYPES[2] + ': ' + str(i + 1))
+            all_cards.append(Card.TYPES[3] + ': ' + str(i + 1))
 
+        if len(all_cards) != 50:
+            raise ValueError(f'Колода не может существовать')
+        return print(all_cards)
 
-x = Card('sleep', 0)
-print(x)
+x = Card('go', 1)
+y = Card.all_cards()
