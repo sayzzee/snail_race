@@ -16,7 +16,3 @@ class Deck:
     @staticmethod
     def create(text: str):
         return Deck(Card.card_list(text))
-
-
-x = Deck()
-print(x)
