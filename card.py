@@ -53,6 +53,10 @@ class Card:
         return card
 
     @staticmethod
+    def card_list(text: str):
+        return [Card.create(word) for word in text.split()]
+
+    @staticmethod
     def all_cards():
         all_cards = []
         for i in range(5):
@@ -69,3 +73,4 @@ class Card:
         if len(all_cards) != 50:
             raise ValueError(f'Колода не может существовать')
         return print(all_cards)
+
