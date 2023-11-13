@@ -12,14 +12,15 @@ class Deck:
         random.shuffle(self.cards)
 
     def deal_cards(self):
-        hand = []
         hands = []
         for i in range(self.num_players):
-            while len(hand) != 2:
-                hand = [self.cards.pop()]
+            hand = []
+            for j in range(2):
+                if self.cards:
+                    hand.append(self.cards.pop())
             hands.append(hand)
         return hands
 
     def draw_card(self):
-        return self.cards.pop()
+        return self.cards.pop() if self.cards else None
 

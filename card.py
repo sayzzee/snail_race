@@ -43,7 +43,7 @@ class Card:
                 return f'{self.typec} - {self.game_rule}'
             else:
                 return f'{self.typec}:{self.value} - {self.game_rule}'
-        return f'{self.typec}:{self.value} - {self.game_rule}'
+        return f'{self.typec}:{self.value}'
 
     @staticmethod
     def create():
@@ -68,4 +68,7 @@ class Card:
 
         if len(all_cards) != 50:
             raise ValueError(f'Колода не может существовать')
+        return all_cards
 
+x = Card.all_cards()
+print(x)
