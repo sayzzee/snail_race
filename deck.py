@@ -1,18 +1,25 @@
 import random
+import pytest
 from card import Card
 
-
 class Deck:
-    def __init__(self, cards: list[Card] | None = None):
-        if cards is None:
-            self.cards = Card.all_cards()
-            random.shuffle(self.cards)
-        else:
-            self.cards = cards
+    def __init__(self, num_players=2):
+        self.num_players = num_players
+        self.cards = Card.all_cards()
+        self.shuffle_deck()
 
-    def __repr__(self):
-        return ' '.join([str(c) for c in self.cards])
+    def shuffle_deck(self):
+        random.shuffle(self.cards)
 
-    @staticmethod
-    def create(text: str):
-        return Deck(Card.card_list(text))
+    def deal_cards(self):
+        hand = []
+        hands = []
+        for i in range(self.num_players):
+            while len(hand) != 2:
+                hand = [self.cards.pop()]
+            hands.append(hand)
+        return hands
+
+    def draw_card(self):
+        return self.cards.pop()
+

@@ -40,10 +40,10 @@ class Card:
     def __repr__(self):
         if self.game_rule != "":
             if self.typec == "sleep" or self.typec == "vegetable":
-                return f'{self.typec}'
+                return f'{self.typec} - {self.game_rule}'
             else:
                 return f'{self.typec}:{self.value} - {self.game_rule}'
-        return f'{self.typec}:{self.value}'
+        return f'{self.typec}:{self.value} - {self.game_rule}'
 
     @staticmethod
     def create():
@@ -51,10 +51,6 @@ class Card:
         value_card = random.choice(Card.VALUES)
         card = Card(type_card, value_card)
         return card
-
-    @staticmethod
-    def card_list(text: str):
-        return [Card.create(word) for word in text.split()]
 
     @staticmethod
     def all_cards():
@@ -72,5 +68,4 @@ class Card:
 
         if len(all_cards) != 50:
             raise ValueError(f'Колода не может существовать')
-        return print(all_cards)
 
