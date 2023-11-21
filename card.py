@@ -1,4 +1,3 @@
-import pytest
 import random
 
 
@@ -69,6 +68,3 @@ class Card:
         if len(all_cards) != 50:
             raise ValueError(f'Колода не может существовать')
         return all_cards
-
-x = Card.all_cards()
-print(x)

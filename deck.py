@@ -1,9 +1,8 @@
 import random
-import pytest
 from card import Card
 
 class Deck:
-    def __init__(self, num_players=2):
+    def __init__(self, num_players=int(2)):
         self.num_players = num_players
         self.cards = Card.all_cards()
         self.shuffle_deck()
@@ -11,11 +10,12 @@ class Deck:
     def shuffle_deck(self):
         random.shuffle(self.cards)
 
-    def deal_cards(self):
+    def deal_cards(self, num_players):
         hands = []
-        for i in range(self.num_players):
+        cards_per_player = 2  # Количество карт для каждого игрока
+        for i in range(num_players):
             hand = []
-            for j in range(2):
+            for j in range(cards_per_player):
                 if self.cards:
                     hand.append(self.cards.pop())
             hands.append(hand)

@@ -42,9 +42,9 @@ def test_shuffle_deck():
     assert set(deck.cards) == set(original_order)
 
 def test_deal_cards():
-    deck = Deck(num_players=2)
+    deck = Deck(num_players=4)
     hands = deck.deal_cards()
-    assert len(hands) == 2
+    assert len(hands) == 4
     assert all(len(hand) == 2 for hand in hands)
 
 def test_draw_card():
