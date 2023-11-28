@@ -86,7 +86,3 @@ class Game:
         sorted_players = sorted(self.player_positions, key=lambda x: self.player_positions[x])
         slowest_player = sorted_players[0]
         self.move_forward(slowest_player, steps)
-
-
-game = Game()
-game.start_game()
