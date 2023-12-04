@@ -1,70 +1,74 @@
 import random
 
-
 class Card:
-    TYPES = ['sleep', 'vegetable', 'go', 'go_last']
-    VALUES = [1, 2, 3]
-    GAME_RULES = {
-        'sleep': 'not move',
-        'vegetable': 'move to nearest vegetable',
-        'go': 'go n steps',
-        'go_last': 'go n steps (last)'
-    }
-
-    VEGETABLES = ['pepper', 'onion', 'peas', 'tomato', 'carrot', 'cucumber']
-
-    COUNT_CARDS = {
-        'vegetables': 30,
-        'sleep': 8,
-        'go': 6,
-        'go_last': 6
-    }
-
-    def __init__(self, typec, value, game_rule=""):
-        if typec in self.TYPES:
-            self.typec = typec
-        else:
-            raise ValueError(f'Неверный тип карты {typec}')
-
-        if typec == 'go' or typec == 'go_last':
-            if value in self.VALUES:
-                self.value = value
-            else:
-                raise ValueError(f'Неверное значение карты {value}')
-        else:
-            self.value = 0
-        if typec in self.GAME_RULES:
-            self.game_rule = game_rule
+    def __init__(self, value):
+        self.value = value
 
     def __repr__(self):
-        if self.game_rule != "":
-            if self.typec == "sleep" or self.typec == "vegetable":
-                return f'{self.typec} - {self.game_rule}'
-            else:
-                return f'{self.typec}:{self.value} - {self.game_rule}'
         return f'{self.typec}:{self.value}'
 
     @staticmethod
-    def create():
-        type_card = random.choice(Card.TYPES)
-        value_card = random.choice(Card.VALUES)
-        card = Card(type_card, value_card)
-        return card
+    def all_cards():
+        sleep_cards = SleepCard.create_deck()
+        vegetable_cards = VegetableCard.create_deck()
+        go_cards = GoCard.create_deck()
+        go_last_cards = GoLastCard.create_deck()
+
+        full_deck = sleep_cards[:8] + vegetable_cards + go_cards[:6] + go_last_cards[:6]
+
+
+        return full_deck
+
+class SleepCard(Card):
+    def __init__(self):
+        super().__init__(0)
+        self.typec = 'sleep'
+        self.game_rule = 'not move'
 
     @staticmethod
-    def all_cards():
-        all_cards = []
-        for i in range(5):
-            for j in range(len(Card.VEGETABLES)):
-                all_cards.append(Card.VEGETABLES[j] + ': 0')
-        for i in range(8):
-            all_cards.append(Card.TYPES[0] + ': 0')
-        for i in range(3):
-            all_cards.append(Card.TYPES[2] + ': ' + str(i + 1))
-            all_cards.append(Card.TYPES[3] + ': ' + str(i + 1))
-            all_cards.append(Card.TYPES[2] + ': ' + str(i + 1))
-            all_cards.append(Card.TYPES[3] + ': ' + str(i + 1))
+    def create_deck():
+        deck = [SleepCard() for _ in range(8)]
+        return deck
 
-        if len(all_cards) != 50:
-            raise ValueError(f'Колода не может существовать')
-        return all_cards
+class VegetableCard(Card):
+    VEGETABLES = ['pepper', 'onion', 'peas', 'tomato', 'carrot', 'cucumber']
+
+    def __init__(self, vegetable):
+        super().__init__(0)
+        self.typec = 'vegetable'
+        self.game_rule = f'move to nearest {vegetable}'
+
+    @staticmethod
+    def create_deck():
+        deck = []
+        for i in range(5):
+            for j in range(len(VegetableCard.VEGETABLES)):
+                veg = VegetableCard.VEGETABLES[j] + ':0'
+                deck.append(str(veg))
+        return deck
+
+class GoCard(Card):
+    def __init__(self, value):
+        super().__init__(value)
+        self.typec = 'go'
+        self.game_rule = f'go {value} steps'
+
+    @staticmethod
+    def create_deck():
+        deck = [GoCard(value) for value in range(1, 4) for _ in range(2)]
+        return deck
+
+class GoLastCard(Card):
+    def __init__(self, value):
+        super().__init__(value)
+        self.typec = 'go_last'
+        self.game_rule = f'go {value} steps (last)'
+
+    @staticmethod
+    def create_deck():
+        deck = [GoLastCard(value) for value in range(1, 4) for _ in range(2)]
+        return deck
+
+
+full_deck = Card.all_cards()
+print(full_deck)
