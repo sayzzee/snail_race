@@ -1,9 +1,7 @@
 import pytest
-from card_newV import VegetableCard, NumberCard
 from snail_newV import Snail
+from card_newV import VegetableCard, NumberCard
 from game_newV import SnailRaceGame
-
-# Replace 'your_module_name' with the actual name of the module containing the game classes.
 
 def test_snail_creation():
     snail = Snail("TestSnail")
@@ -25,7 +23,7 @@ def test_snail_race_game_creation():
     game = SnailRaceGame(players)
 
     assert len(game.players) == 2
-    assert len(game.deck) == 52
+    assert len(game.deck) == 52  # Assuming default deck configuration
     assert len(game.active_snails) == 2
     assert game.current_player_index == 0
 
@@ -41,21 +39,14 @@ def test_snail_race_game_distribute_cards():
 
     assert all(len(player.hand) == 2 for player in game.players)
 
-def test_snail_race_game_next_player():
+def test_snail_race_game_play_card():
     players = [Snail("Snail1"), Snail("Snail2")]
     game = SnailRaceGame(players)
+    initial_position = game.players[0].position
 
-    assert game.current_player_index == 0
-    game.next_player()
-    assert game.current_player_index == 1
-    game.next_player()
-    assert game.current_player_index == 0
+    game.play_card(0)
 
-def test_snail_race_game_draw_card():
-    players = [Snail("Snail1"), Snail("Snail2")]
-    game = SnailRaceGame(players)
-    initial_hand_size = len(game.players[0].hand)
+    assert game.players[0].position != initial_position
 
-    game.draw_card(game.players[0])
-
-    assert len(game.players[0].hand) == initial_hand_size + 1
+if __name__ == "__main__":
+    pytest.main()

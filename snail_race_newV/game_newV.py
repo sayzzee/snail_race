@@ -1,7 +1,6 @@
-import random
 import json
-from card_newV import VegetableCard, NumberCard
-from snail_newV import Snail
+import random
+from card_newV import NumberCard, VegetableCard
 
 class SnailRaceGame:
     def __init__(self, players):
@@ -23,43 +22,44 @@ class SnailRaceGame:
         self.field = field
         self.active_snails = players.copy()
         self.current_player_index = 0
-        self.deck = self.create_deck()
-        self.distribute_cards()
+        self.deck = NumberCard.create_deck()
+        NumberCard.distribute_cards(players, self.deck)
 
     def __repr__(self):
-        return (f'{self.players}\n{self.field}\n{self.deck}')
+        return f'{self.players}\n{self.field}\n{self.deck}'
 
-    def create_deck(self):
-        deck = []
-        veggies = ['перец', 'лук', 'горох', 'помидор', 'морковь', 'огурец']
-        for veggie in veggies:
-            for _ in range(5):
-                deck.append(VegetableCard(veggie))
-        for _ in range(8):
-            deck.append(NumberCard(0, False))  # спящая улитка
-        for _ in range(3):
-            deck.append(NumberCard(1, False))  # номер без стрелки
-            deck.append(NumberCard(2, False))
-            deck.append(NumberCard(3, False))
-            deck.append(NumberCard(1, True))   # номер со стрелкой
-            deck.append(NumberCard(2, True))
-            deck.append(NumberCard(3, True))
-        random.shuffle(deck)
-        return deck
+    def play_card(self, card_index):
+        current_player = self.players[self.current_player_index]
+        card = current_player.hand.pop(card_index)
+        if isinstance(card, VegetableCard):
+            current_veggie = card.veggie
+            found_veggie_position = None
+            for i in range(current_player.position + 1, len(self.field)):
+                if self.field[i] == current_veggie:
+                    found_veggie_position = i
+                    break
+            if found_veggie_position is not None:
+                self.field[current_player.position] = ''
+                current_player.position = found_veggie_position
+                self.field[current_player.position] = current_veggie
+        elif isinstance(card, NumberCard):
+            if card.arrow:
+                # двигаем улитку с самой маленькой позицией
+                min_snail = min(self.active_snails, key=lambda x: x.position)
+                min_snail.move(card.number)
+            else:
+                # двигаем улитку игрока, который играет карту
+                current_player.move(card.number)
+                for snail in self.active_snails:
+                    if snail != current_player and snail.position == current_player.position:
+                        snail.move(card.number)
+        NumberCard.draw_card(current_player, self.deck)
 
-    def distribute_cards(self):
-        for player in self.players:
-            player_cards = [self.deck.pop(), self.deck.pop()]
-            player.hand = player_cards
-
-    def next_player(self):
-        self.current_player_index = (self.current_player_index + 1) % len(self.players)
-
-    def draw_card(self, player):
-        if len(self.deck) > 0:
-            player.hand.append(self.deck.pop())
-        else:
-            print("Колода пуста, больше карт нет")
+    def check_winner(self):
+        remaining_snails = [snail for snail in self.active_snails if snail.position < len(self.field)]
+        if len(remaining_snails) == 1:
+            return remaining_snails[0]
+        return None
 
     def display_field_with_snails(self):
         field_with_snails = self.field.copy()
@@ -97,59 +97,6 @@ class SnailRaceGame:
                     field_with_snails[j] = veggie_positions[j]
 
             print('  '.join(row))
-
-    def play_card(self, card_index):
-        current_player = self.players[self.current_player_index]
-        card = current_player.hand.pop(card_index)
-        if isinstance(card, VegetableCard):
-            current_veggie = card.veggie
-            found_veggie_position = None
-            for i in range(current_player.position + 1, len(self.field)):
-                if self.field[i] == current_veggie:
-                    found_veggie_position = i
-                    break
-            if found_veggie_position is not None:
-                self.field[current_player.position] = ''
-                current_player.position = found_veggie_position
-                self.field[current_player.position] = current_veggie
-        elif isinstance(card, NumberCard):
-            if card.arrow:
-                # двигаем улитку с самой маленькой позицией
-                min_snail = min(self.active_snails, key=lambda x: x.position)
-                min_snail.move(card.number)
-            else:
-                # двигаем улитку игрока, который играет карту
-                current_player.move(card.number)
-                for snail in self.active_snails:
-                    if snail != current_player and snail.position == current_player.position:
-                        snail.move(card.number)
-        self.draw_card(current_player)
-
-    def check_winner(self):
-        remaining_snails = [snail for snail in self.active_snails if snail.position < len(self.field)]
-        if len(remaining_snails) == 1:
-            return remaining_snails[0]
-        return None
-
-    def show_hand(self):
-        current_player = self.players[self.current_player_index]
-        print(f"Карты в руке игрока {current_player.name}:")
-        for i, card in enumerate(current_player.hand):
-            if isinstance(card, VegetableCard):
-                target_veggie = card.veggie
-                print(f"{i}: Карта овоща ({target_veggie})")
-            elif isinstance(card, NumberCard):
-                card_type = "со стрелкой" if card.arrow else "без стрелки"
-                print(f"{i}: Карта с номером ({card.number}) - Тип: {card_type}")
-
-    def find_nearest_veggie_position(self, target_veggie, current_position):
-        veggie_positions = [i for i, veggie in enumerate(self.field) if veggie == target_veggie]
-        if not veggie_positions:
-            return "нет такого овоща на поле"
-
-        distances = [abs(pos - current_position) for pos in veggie_positions]
-        nearest_position = veggie_positions[distances.index(min(distances))]
-        return nearest_position
 
     def save_game_to_json(self, filename):
         game_state = {
