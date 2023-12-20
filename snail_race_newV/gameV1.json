@@ -1,0 +1,62 @@
+{
+  "players": [
+    {
+      "name": "Player1",
+      "position": 2,
+      "sleeping": false,
+      "hand": [
+        {"veggie": "peas"},
+        {"number": 2, "arrow": false}
+      ]
+    },
+    {
+      "name": "Player2",
+      "position": 4,
+      "sleeping": true,
+      "hand": [
+        {"veggie": "tomato"},
+        {"number": 3, "arrow": true}
+      ]
+    }
+  ],
+  "field": [
+    "________",
+    "peas",
+    "pepper",
+    "pepper",
+    "peas",
+    "onion",
+    "tomato",
+    "cucumber",
+    "tomato",
+    "carrot",
+    "pepper",
+    "cucumber",
+    "onion",
+    "carrot",
+    "tomato"
+  ],
+  "active_snails": ["Player1", "Player2"],
+  "current_player_index": 0,
+  "deck": [
+    {"veggie": "cucumber"},
+    {"veggie": "tomato"},
+    {"number": 1, "arrow": false},
+    {"number": 3, "arrow": true},
+    {"number": 2, "arrow": false},
+    {"number": 0, "arrow": false},
+    {"number": 2, "arrow": true},
+    {"number": 1, "arrow": true},
+    {"veggie": "carrot"},
+    {"veggie": "peas"},
+    {"veggie": "tomato"},
+    {"veggie": "onion"},
+    {"number": 3, "arrow": false},
+    {"number": 0, "arrow": false},
+    {"number": 1, "arrow": false},
+    {"number": 2, "arrow": false},
+    {"number": 3, "arrow": false},
+    {"veggie": "pepper"},
+    {"veggie": "cucumber"}
+  ]
+}
